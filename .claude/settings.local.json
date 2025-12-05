@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir:*)",
+      "Bash(python create_grid.py:*)",
+      "Bash(uv run:*)",
+      "WebSearch"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
