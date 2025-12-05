@@ -16,6 +16,8 @@ class TutorialRequest(BaseModel):
     input_type: InputType
     topic: Optional[str] = None
     image: Optional[str] = None  # Base64 encoded image
+    api_key: Optional[str] = None  # User's Gemini API key
+    model: Optional[str] = "gemini-2.5-flash-image"  # Image generation model
 
 class TutorialCreate(BaseModel):
     user_id: Optional[str] = None

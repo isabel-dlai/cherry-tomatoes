@@ -47,7 +47,10 @@ class TutorialService:
                     original_image_url = await self._save_original_image(request.image)
 
                 # Extract subject from image using Gemini Vision
-                subject = await gemini_service.extract_subject_from_image(request.image)
+                subject = await gemini_service.extract_subject_from_image(
+                    request.image,
+                    api_key=request.api_key
+                )
             else:
                 # Use the provided topic as the subject
                 subject = request.topic
@@ -57,7 +60,10 @@ class TutorialService:
 
             # Generate the 4-panel tutorial image
             tutorial_image_bytes, filename = await gemini_service.generate_tutorial_image(
-                prompt, settings.GRID_TEMPLATE_PATH
+                prompt,
+                settings.GRID_TEMPLATE_PATH,
+                model=request.model,
+                api_key=request.api_key
             )
 
             # Save the tutorial image

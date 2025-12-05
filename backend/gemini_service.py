@@ -9,16 +9,22 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-# Configure Gemini API
-genai.configure(api_key=settings.GEMINI_API_KEY)
-
 class GeminiService:
     def __init__(self):
-        # Initialize Gemini models
-        self.vision_model = genai.GenerativeModel('gemini-2.0-flash-exp')  # For image analysis
-        self.image_generation_model = genai.GenerativeModel('gemini-2.5-flash-image')  # For image generation (Nano Banana)
+        # Models will be initialized per request with user's API key
+        pass
 
-    async def extract_subject_from_image(self, image_base64: str) -> str:
+    def _get_configured_model(self, model_name: str, api_key: Optional[str] = None):
+        """Get a configured Gemini model with the appropriate API key."""
+        key_to_use = api_key if api_key else settings.GEMINI_API_KEY
+        if not key_to_use:
+            raise ValueError("No API key provided. Please add your Gemini API key.")
+
+        # Configure with the appropriate key
+        genai.configure(api_key=key_to_use)
+        return genai.GenerativeModel(model_name)
+
+    async def extract_subject_from_image(self, image_base64: str, api_key: Optional[str] = None) -> str:
         """Extract the main subject from an uploaded image using Gemini Vision."""
         try:
             # Decode base64 image
@@ -33,8 +39,11 @@ class GeminiService:
             Just return the subject description, nothing else.
             """
 
+            # Get vision model with appropriate API key
+            vision_model = self._get_configured_model('gemini-2.0-flash-exp', api_key)
+
             # Send to Gemini Vision
-            response = self.vision_model.generate_content([prompt, image])
+            response = vision_model.generate_content([prompt, image])
             subject = response.text.strip()
 
             logger.info(f"Extracted subject: {subject}")
@@ -64,20 +73,29 @@ Create 1 image, but show each step of the tutorial separately. Use the provided 
 
         return prompt
 
-    async def generate_tutorial_image(self, prompt: str, grid_path: str) -> Tuple[bytes, str]:
+    async def generate_tutorial_image(
+        self,
+        prompt: str,
+        grid_path: str,
+        model: str = "gemini-2.5-flash-image",
+        api_key: Optional[str] = None
+    ) -> Tuple[bytes, str]:
         """
-        Generate the 4-panel tutorial image using Gemini 2.5 Flash Image (Nano Banana).
+        Generate the 4-panel tutorial image using specified Gemini image generation model.
         Returns the image bytes and the filename.
         """
         try:
             # Load the grid template
             grid_image = Image.open(grid_path)
 
-            logger.info(f"Generating tutorial with Gemini 2.5 Flash Image...")
+            logger.info(f"Generating tutorial with {model}...")
             logger.info(f"Prompt: {prompt[:100]}...")
 
-            # Generate the image using Gemini 2.5 Flash Image
-            response = self.image_generation_model.generate_content([
+            # Get image generation model with appropriate API key
+            image_generation_model = self._get_configured_model(model, api_key)
+
+            # Generate the image using Gemini
+            response = image_generation_model.generate_content([
                 prompt,
                 grid_image
             ])

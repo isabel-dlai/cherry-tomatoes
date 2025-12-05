@@ -22,6 +22,16 @@ export const tutorialAPI = {
       payload.image = data;
     }
 
+    // Get API key and model from localStorage
+    const apiKey = localStorage.getItem('gemini_api_key');
+    const model = localStorage.getItem('gemini_model') || 'gemini-2.5-flash-image';
+
+    // Add API key and model to payload if available
+    if (apiKey) {
+      payload.api_key = apiKey;
+    }
+    payload.model = model;
+
     const response = await api.post('/api/tutorials/generate', payload);
     return response.data;
   },

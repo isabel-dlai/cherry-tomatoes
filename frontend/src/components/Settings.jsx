@@ -1,0 +1,261 @@
+import React, { useState, useEffect } from 'react';
+
+const MODELS = [
+  {
+    id: 'gemini-2.5-flash-image',
+    name: 'Gemini 2.5 Flash Image',
+    nickname: 'Nano Banana',
+    description: 'Fast and efficient image generation'
+  },
+  {
+    id: 'gemini-3-pro-image-preview',
+    name: 'Gemini 3 Pro Image',
+    nickname: 'Nano Banana Pro',
+    description: 'Advanced image generation with higher quality'
+  }
+];
+
+function Settings({ onClose }) {
+  const [apiKey, setApiKey] = useState('');
+  const [selectedModel, setSelectedModel] = useState('gemini-2.5-flash-image');
+  const [showApiKey, setShowApiKey] = useState(false);
+  const [saveSuccess, setSaveSuccess] = useState(false);
+
+  // Load settings from localStorage on mount
+  useEffect(() => {
+    const savedApiKey = localStorage.getItem('gemini_api_key');
+    const savedModel = localStorage.getItem('gemini_model');
+
+    if (savedApiKey) setApiKey(savedApiKey);
+    if (savedModel) setSelectedModel(savedModel);
+  }, []);
+
+  const handleSave = () => {
+    // Save to localStorage
+    if (apiKey.trim()) {
+      localStorage.setItem('gemini_api_key', apiKey.trim());
+    } else {
+      localStorage.removeItem('gemini_api_key');
+    }
+    localStorage.setItem('gemini_model', selectedModel);
+
+    setSaveSuccess(true);
+    setTimeout(() => {
+      setSaveSuccess(false);
+      if (onClose) onClose();
+    }, 1500);
+  };
+
+  const handleClearApiKey = () => {
+    setApiKey('');
+    localStorage.removeItem('gemini_api_key');
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+        {/* Header */}
+        <div className="flex justify-between items-center p-6 border-b border-gray-200">
+          <h2 className="text-2xl font-bold text-gray-800">Settings</h2>
+          <button
+            onClick={onClose}
+            className="text-gray-400 hover:text-gray-600 transition-colors"
+          >
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+        </div>
+
+        {/* Content */}
+        <div className="p-6 space-y-6">
+          {/* API Key Section */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Gemini API Key
+            </label>
+            <div className="space-y-2">
+              <div className="relative">
+                <input
+                  type={showApiKey ? 'text' : 'password'}
+                  value={apiKey}
+                  onChange={(e) => setApiKey(e.target.value)}
+                  placeholder="Enter your Gemini API key"
+                  className="w-full px-4 py-2 pr-20 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowApiKey(!showApiKey)}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-sm text-gray-500 hover:text-gray-700"
+                >
+                  {showApiKey ? 'Hide' : 'Show'}
+                </button>
+              </div>
+              <div className="flex items-start space-x-2 text-sm text-gray-600">
+                <svg
+                  className="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+                <div>
+                  <p>Get your free API key at{' '}
+                    <a
+                      href="https://ai.google.dev/gemini-api/docs/api-key"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-primary-600 hover:underline"
+                    >
+                      Google AI Studio
+                    </a>
+                  </p>
+                  <p className="mt-1 text-xs text-gray-500">
+                    Your API key is stored locally in your browser and never sent to our servers.
+                  </p>
+                </div>
+              </div>
+              {apiKey && (
+                <button
+                  onClick={handleClearApiKey}
+                  className="text-sm text-red-600 hover:text-red-700"
+                >
+                  Clear API Key
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* Model Selection */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-3">
+              Image Generation Model
+            </label>
+            <div className="space-y-3">
+              {MODELS.map((model) => (
+                <div
+                  key={model.id}
+                  onClick={() => setSelectedModel(model.id)}
+                  className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
+                    selectedModel === model.id
+                      ? 'border-primary-500 bg-primary-50'
+                      : 'border-gray-200 hover:border-gray-300'
+                  }`}
+                >
+                  <div className="flex items-start">
+                    <div className="flex-shrink-0 mt-1">
+                      <div
+                        className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                          selectedModel === model.id
+                            ? 'border-primary-500'
+                            : 'border-gray-300'
+                        }`}
+                      >
+                        {selectedModel === model.id && (
+                          <div className="w-3 h-3 bg-primary-500 rounded-full" />
+                        )}
+                      </div>
+                    </div>
+                    <div className="ml-3 flex-1">
+                      <div className="flex items-center space-x-2">
+                        <h3 className="text-sm font-semibold text-gray-900">
+                          {model.name}
+                        </h3>
+                        <span className="text-xs text-gray-500 font-mono">
+                          ({model.nickname})
+                        </span>
+                      </div>
+                      <p className="text-sm text-gray-600 mt-1">
+                        {model.description}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="mt-3 flex items-start space-x-2 text-sm text-gray-600">
+              <svg
+                className="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                />
+              </svg>
+              <p>
+                Note: Gemini 3 Pro Image may have different rate limits and pricing.
+                Check{' '}
+                <a
+                  href="https://ai.google.dev/pricing"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-primary-600 hover:underline"
+                >
+                  pricing details
+                </a>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="flex justify-end space-x-3 p-6 border-t border-gray-200 bg-gray-50">
+          <button
+            onClick={onClose}
+            className="px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={handleSave}
+            className="px-4 py-2 text-white bg-primary-600 rounded-lg hover:bg-primary-700 transition-colors"
+          >
+            {saveSuccess ? (
+              <span className="flex items-center">
+                <svg
+                  className="w-5 h-5 mr-2"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M5 13l4 4L19 7"
+                  />
+                </svg>
+                Saved!
+              </span>
+            ) : (
+              'Save Settings'
+            )}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default Settings;
