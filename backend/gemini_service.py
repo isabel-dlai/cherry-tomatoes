@@ -62,14 +62,20 @@ but show each step of the tutorial separately. Use the provided grid.
 1. Top left - Basic shapes (simple geometric forms)
 2. Top right - Rough sketch (refined proportions)
 3. Bottom left - Line work (clean outlines)
-4. Bottom right - Shading (values and depth)"""
+4. Bottom right - Shading (values and depth)
+
+IMPORTANT: Do NOT include any text, labels, titles, or words in the generated image.
+Only show the drawings themselves without any text annotations."""
         else:
             prompt = f"""Show a 4-step drawing tutorial of {subject} in the provided grid layout.
 Create 1 image, but show each step of the tutorial separately. Use the provided grid.
 1. Top left - Basic shapes (simple geometric forms)
 2. Top right - Rough sketch (refined proportions)
 3. Bottom left - Line work (clean outlines)
-4. Bottom right - Shading (values and depth)"""
+4. Bottom right - Shading (values and depth)
+
+IMPORTANT: Do NOT include any text, labels, titles, or words in the generated image.
+Only show the drawings themselves without any text annotations."""
 
         return prompt
 
@@ -133,22 +139,22 @@ Create 1 image, but show each step of the tutorial separately. Use the provided 
             {
                 "step_number": 1,
                 "title": "Basic Shapes",
-                "description": "Break down the subject into simple geometric shapes (circles, rectangles, triangles, ovals). Focus on establishing proportions and overall composition."
+                "description": "Break down the subject into simple geometric shapes (circles, rectangles, triangles, ovals). Focus on establishing proportions and overall composition.\n\nTips:\n• Draw lightly so you can erase easily\n• Look for the biggest shapes first, ignore details\n• Use negative space to check proportions"
             },
             {
                 "step_number": 2,
                 "title": "Rough Sketch",
-                "description": "Refine the basic shapes into recognizable forms. Add details while maintaining loose, exploratory lines. Don't worry about perfection yet."
+                "description": "Refine the basic shapes into recognizable forms. Add details while maintaining loose, exploratory lines. Don't worry about perfection yet.\n\nTips:\n• Keep your lines loose and exploratory\n• Focus on relationships between parts\n• Draw through forms to understand structure"
             },
             {
                 "step_number": 3,
                 "title": "Line Work",
-                "description": "Create clean, confident outlines. Define edges and important details with deliberate strokes. This is where your drawing gains clarity."
+                "description": "Create clean, confident outlines. Define edges and important details with deliberate strokes. This is where your drawing gains clarity.\n\nTips:\n• Vary line weight - thicker for shadows, thinner for highlights\n• Draw from your shoulder, not your wrist\n• Erase construction lines lightly before final lines"
             },
             {
                 "step_number": 4,
                 "title": "Shading",
-                "description": "Add values, shadows, and highlights to create depth and dimension. Consider the light source and how it affects the subject."
+                "description": "Add values, shadows, and highlights to create depth and dimension. Consider the light source and how it affects the subject.\n\nTips:\n• Squint to see value relationships more clearly\n• Build up gradually from light to dark\n• Leave your brightest highlights for last"
             }
         ]
 

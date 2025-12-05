@@ -88,60 +88,65 @@ const TutorialDisplay = ({ tutorial, onBack }) => {
         </div>
       </div>
 
-      {/* Current Step Info */}
-      <div className="bg-white rounded-lg shadow-md p-6 mb-8">
-        <div className="flex items-center mb-4">
-          <div className="w-12 h-12 bg-primary-500 text-white rounded-full flex items-center justify-center font-bold text-xl mr-4">
-            {currentStep + 1}
+      {/* Artist Workflow Layout */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        {/* Left: Current Step (Large - 2 columns) */}
+        <div className="lg:col-span-2">
+          <div className="bg-white rounded-lg shadow-lg p-6">
+            <div className="flex items-center mb-4">
+              <div className="w-12 h-12 bg-primary-500 text-white rounded-full flex items-center justify-center font-bold text-xl mr-4">
+                {currentStep + 1}
+              </div>
+              <div>
+                <h3 className="text-2xl font-semibold text-gray-800">
+                  {tutorial.steps[currentStep].title}
+                </h3>
+              </div>
+            </div>
+            <div className="relative w-full overflow-hidden rounded-lg border-4 border-primary-500">
+              <div
+                className="w-full"
+                style={{
+                  paddingBottom: '75%',
+                  backgroundImage: `url(${tutorial.tutorial_image_url})`,
+                  backgroundSize: '200% 200%',
+                  backgroundPosition: `${stepPositions[currentStep].x}% ${stepPositions[currentStep].y}%`,
+                  backgroundRepeat: 'no-repeat',
+                }}
+              />
+            </div>
           </div>
-          <div>
-            <h3 className="text-2xl font-semibold text-gray-800">
-              {tutorial.steps[currentStep].title}
-            </h3>
-            <p className="text-gray-600 mt-1">
+        </div>
+
+        {/* Right Column: Final Result + Instructions */}
+        <div className="space-y-6">
+          {/* Final Result Reference */}
+          <div className="bg-white rounded-lg shadow-lg p-4">
+            <h4 className="text-sm font-semibold text-gray-800 mb-3 text-center uppercase tracking-wide">
+              Goal
+            </h4>
+            <div className="relative w-full overflow-hidden rounded-lg border-3 border-green-500">
+              <div
+                className="w-full"
+                style={{
+                  paddingBottom: '75%',
+                  backgroundImage: `url(${tutorial.tutorial_image_url})`,
+                  backgroundSize: '200% 200%',
+                  backgroundPosition: '100% 100%',
+                  backgroundRepeat: 'no-repeat',
+                }}
+              />
+            </div>
+          </div>
+
+          {/* Instructions */}
+          <div className="bg-white rounded-lg shadow-lg p-6">
+            <h4 className="text-sm font-semibold text-gray-800 mb-3 uppercase tracking-wide">
+              Instructions
+            </h4>
+            <div className="text-gray-700 leading-relaxed whitespace-pre-line">
               {tutorial.steps[currentStep].description}
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* Image Display - Current Step and Final Result */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-        {/* Current Step */}
-        <div className="bg-white rounded-lg shadow-lg p-6">
-          <h4 className="text-lg font-semibold text-gray-800 mb-4 text-center">
-            Current Step: {tutorial.steps[currentStep].title}
-          </h4>
-          <div className="relative w-full overflow-hidden rounded-lg border-4 border-primary-500">
-            <div
-              className="w-full"
-              style={{
-                paddingBottom: '75%', // Adjust based on actual image aspect ratio (4:3 is common)
-                backgroundImage: `url(${tutorial.tutorial_image_url})`,
-                backgroundSize: '200% 200%',
-                backgroundPosition: `${stepPositions[currentStep].x}% ${stepPositions[currentStep].y}%`,
-                backgroundRepeat: 'no-repeat',
-              }}
-            />
-          </div>
-        </div>
-
-        {/* Final Result */}
-        <div className="bg-white rounded-lg shadow-lg p-6">
-          <h4 className="text-lg font-semibold text-gray-800 mb-4 text-center">
-            Final Result
-          </h4>
-          <div className="relative w-full overflow-hidden rounded-lg border-4 border-green-500">
-            <div
-              className="w-full"
-              style={{
-                paddingBottom: '75%', // Adjust based on actual image aspect ratio (4:3 is common)
-                backgroundImage: `url(${tutorial.tutorial_image_url})`,
-                backgroundSize: '200% 200%',
-                backgroundPosition: '100% 100%',
-                backgroundRepeat: 'no-repeat',
-              }}
-            />
+            </div>
           </div>
         </div>
       </div>
@@ -238,9 +243,9 @@ const TutorialDisplay = ({ tutorial, onBack }) => {
                   {step.title}
                 </h3>
               </div>
-              <p className="text-gray-600 text-sm leading-relaxed">
+              <div className="text-gray-600 text-sm leading-relaxed whitespace-pre-line">
                 {step.description}
-              </p>
+              </div>
             </div>
           ))}
         </div>
