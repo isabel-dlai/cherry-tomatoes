@@ -198,11 +198,13 @@ const TutorialDisplay = ({ tutorial, onBack }) => {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-full p-6">
         {/* Left: Current Step (Large - 2 columns) */}
         <div className="lg:col-span-2 overflow-hidden flex flex-col min-h-0">
-          <div className="bg-white rounded-lg shadow-lg p-6 h-full flex flex-col min-h-0 items-center justify-center">
+          <div className="bg-white rounded-lg shadow-lg p-6 h-full flex items-center justify-center min-h-0">
             <div
-              className="w-full rounded-lg border-4 border-primary-500"
+              className="rounded-lg border-4 border-primary-500"
               style={{
+                width: '100%',
                 aspectRatio: '4 / 3',
+                maxWidth: '100%',
                 maxHeight: '100%',
                 backgroundImage: `url(${tutorial.tutorial_image_url})`,
                 backgroundSize: '200% 200%',
@@ -222,9 +224,11 @@ const TutorialDisplay = ({ tutorial, onBack }) => {
             </h4>
             <div className="flex-1 min-h-0 flex items-center justify-center overflow-hidden">
               <div
-                className="w-full rounded-lg border-3 border-green-500"
+                className="rounded-lg border-3 border-green-500"
                 style={{
+                  width: '100%',
                   aspectRatio: '1',
+                  maxWidth: '100%',
                   maxHeight: '100%',
                   backgroundImage: `url(${tutorial.tutorial_image_url})`,
                   backgroundSize: '200% 200%',
