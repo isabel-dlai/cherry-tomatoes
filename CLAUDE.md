@@ -129,6 +129,14 @@ Frontend proxy and backend CORS must align:
 - Vite proxy: `/api` and `/static` → `http://localhost:8000`
 - Backend CORS: `["http://localhost:5173", "http://localhost:3000"]`
 
+### 5. Viewport-Fitted Layout
+The tutorial display uses viewport-constrained layout to fit everything on screen:
+- **Critical**: Add `height: 100%` to parent containers to propagate viewport height
+- Main tutorial layout: Uses CSS Grid with `h-full` and `min-h-0` for proper flex shrinking
+- Aspect ratios preserved: 4:3 for main step image, 1:1 for goal image
+- Right column uses flex ratios (`flex: 2 1 0` and `flex: 3 1 0`) instead of fixed percentages
+- Avoid fixed heights (like `height: 40%`) - they don't account for padding/gaps and cause overflow
+
 ## Data Model
 
 ### Tutorial Document (MongoDB)
@@ -175,6 +183,7 @@ Frontend proxy and backend CORS must align:
 | `backend/tutorial_service.py` | Business logic for tutorial generation |
 | `backend/config.py` | Environment config - check here for paths |
 | `frontend/src/App.jsx` | Main app logic and state management |
+| `frontend/src/components/TutorialDisplay.jsx` | Tutorial viewer with collapsible sidebar and viewport-fitted layout |
 | `frontend/src/components/InputInterface.jsx` | Dual-mode input (topic/image) |
 | `static/grids/Grid.png` | 4-panel template (CRITICAL - must exist) |
 
