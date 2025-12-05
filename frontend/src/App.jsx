@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Routes, Route, useNavigate, Link } from 'react-router-dom';
 import InputInterface from './components/InputInterface';
 import TutorialDisplay from './components/TutorialDisplay';
@@ -13,6 +13,19 @@ function App() {
   const [activeTab, setActiveTab] = useState('create');
   const [showSettings, setShowSettings] = useState(false);
   const navigate = useNavigate();
+
+  // Load and apply saved theme on mount
+  useEffect(() => {
+    const savedColor = localStorage.getItem('accent_color') || 'blue';
+    applyTheme(savedColor);
+  }, []);
+
+  const applyTheme = (color) => {
+    document.documentElement.removeAttribute('data-theme');
+    if (color !== 'blue') {
+      document.documentElement.setAttribute('data-theme', color);
+    }
+  };
 
   const handleGenerateTutorial = async (inputType, data) => {
     try {

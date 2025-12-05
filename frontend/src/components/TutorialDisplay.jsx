@@ -11,11 +11,12 @@ const TutorialDisplay = ({ tutorial, onBack }) => {
   }
 
   // Grid layout positions for each step (as percentages)
+  // With backgroundSize: '200% 200%', use 0 and 100 for positioning
   const stepPositions = [
     { x: 0, y: 0, label: 'Top Left' },      // Step 1: Basic shapes
-    { x: 50, y: 0, label: 'Top Right' },    // Step 2: Rough sketch
-    { x: 0, y: 50, label: 'Bottom Left' },  // Step 3: Line work
-    { x: 50, y: 50, label: 'Bottom Right' } // Step 4: Shading (final)
+    { x: 100, y: 0, label: 'Top Right' },    // Step 2: Rough sketch
+    { x: 0, y: 100, label: 'Bottom Left' },  // Step 3: Line work
+    { x: 100, y: 100, label: 'Bottom Right' } // Step 4: Shading (final)
   ];
 
   // Final result is always step 4 (bottom right)
@@ -107,13 +108,13 @@ const TutorialDisplay = ({ tutorial, onBack }) => {
               <div className="flex items-center justify-between text-xs mb-2">
                 <span className="font-medium text-gray-700">Progress</span>
                 <span className="text-gray-500">
-                  {Math.round(((currentStep + 1) / tutorial.steps.length) * 100)}%
+                  {Math.round((currentStep / tutorial.steps.length) * 100)}%
                 </span>
               </div>
               <div className="w-full bg-gray-200 rounded-full h-1.5">
                 <div
                   className="bg-primary-500 h-1.5 rounded-full transition-all duration-300"
-                  style={{ width: `${((currentStep + 1) / tutorial.steps.length) * 100}%` }}
+                  style={{ width: `${(currentStep / tutorial.steps.length) * 100}%` }}
                 ></div>
               </div>
             </div>

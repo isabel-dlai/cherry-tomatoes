@@ -15,9 +15,28 @@ const MODELS = [
   }
 ];
 
+const ACCENT_COLORS = [
+  {
+    id: 'blue',
+    name: 'Blue',
+    preview: 'bg-sky-500'
+  },
+  {
+    id: 'pink',
+    name: 'Pink',
+    preview: 'bg-pink-500'
+  },
+  {
+    id: 'green',
+    name: 'Green',
+    preview: 'bg-green-500'
+  }
+];
+
 function Settings({ onClose }) {
   const [apiKey, setApiKey] = useState('');
   const [selectedModel, setSelectedModel] = useState('gemini-2.5-flash-image');
+  const [accentColor, setAccentColor] = useState('blue');
   const [showApiKey, setShowApiKey] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
 
@@ -25,9 +44,11 @@ function Settings({ onClose }) {
   useEffect(() => {
     const savedApiKey = localStorage.getItem('gemini_api_key');
     const savedModel = localStorage.getItem('gemini_model');
+    const savedColor = localStorage.getItem('accent_color');
 
     if (savedApiKey) setApiKey(savedApiKey);
     if (savedModel) setSelectedModel(savedModel);
+    if (savedColor) setAccentColor(savedColor);
   }, []);
 
   const handleSave = () => {
@@ -38,12 +59,26 @@ function Settings({ onClose }) {
       localStorage.removeItem('gemini_api_key');
     }
     localStorage.setItem('gemini_model', selectedModel);
+    localStorage.setItem('accent_color', accentColor);
+
+    // Apply theme immediately
+    applyTheme(accentColor);
 
     setSaveSuccess(true);
     setTimeout(() => {
       setSaveSuccess(false);
       if (onClose) onClose();
     }, 1500);
+  };
+
+  const applyTheme = (color) => {
+    // Remove all theme attributes
+    document.documentElement.removeAttribute('data-theme');
+
+    // Apply new theme if not default (blue)
+    if (color !== 'blue') {
+      document.documentElement.setAttribute('data-theme', color);
+    }
   };
 
   const handleClearApiKey = () => {
@@ -216,6 +251,49 @@ function Settings({ onClose }) {
                 </a>
               </p>
             </div>
+          </div>
+
+          {/* Accent Color Selection */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-3">
+              Accent Color
+            </label>
+            <div className="grid grid-cols-3 gap-3">
+              {ACCENT_COLORS.map((color) => (
+                <div
+                  key={color.id}
+                  onClick={() => setAccentColor(color.id)}
+                  className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
+                    accentColor === color.id
+                      ? 'border-primary-500 bg-primary-50'
+                      : 'border-gray-200 hover:border-gray-300'
+                  }`}
+                >
+                  <div className="flex flex-col items-center space-y-2">
+                    <div className={`w-10 h-10 rounded-full ${color.preview}`} />
+                    <span className="text-sm font-medium text-gray-900">
+                      {color.name}
+                    </span>
+                    {accentColor === color.id && (
+                      <svg
+                        className="w-5 h-5 text-primary-600"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+            <p className="mt-3 text-sm text-gray-600">
+              Choose an accent color that will be applied throughout the app
+            </p>
           </div>
         </div>
 
