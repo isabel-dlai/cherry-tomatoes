@@ -60,9 +60,9 @@ class GeminiService:
 Show a 4-step drawing tutorial in the provided grid layout. Create 1 image,
 but show each step of the tutorial separately. Use the provided grid.
 1. Top left - Basic shapes (simple geometric forms)
-2. Top right - Rough sketch (refined proportions)
-3. Bottom left - Line work (clean outlines)
-4. Bottom right - Shading (values and depth)
+2. Top right - Rough sketch (refined proportions and structure)
+3. Bottom left - Shading (add values, shadows, and dimension)
+4. Bottom right - Final details (textures, highlights, and finishing touches)
 
 IMPORTANT: Do NOT include any text, labels, titles, or words in the generated image.
 Only show the drawings themselves without any text annotations."""
@@ -70,9 +70,9 @@ Only show the drawings themselves without any text annotations."""
             prompt = f"""Show a 4-step drawing tutorial of {subject} in the provided grid layout.
 Create 1 image, but show each step of the tutorial separately. Use the provided grid.
 1. Top left - Basic shapes (simple geometric forms)
-2. Top right - Rough sketch (refined proportions)
-3. Bottom left - Line work (clean outlines)
-4. Bottom right - Shading (values and depth)
+2. Top right - Rough sketch (refined proportions and structure)
+3. Bottom left - Shading (add values, shadows, and dimension)
+4. Bottom right - Final details (textures, highlights, and finishing touches)
 
 IMPORTANT: Do NOT include any text, labels, titles, or words in the generated image.
 Only show the drawings themselves without any text annotations."""
@@ -148,13 +148,13 @@ Only show the drawings themselves without any text annotations."""
             },
             {
                 "step_number": 3,
-                "title": "Line Work",
-                "description": "Create clean, confident outlines. Define edges and important details with deliberate strokes. This is where your drawing gains clarity.\n\nTips:\n• Vary line weight - thicker for shadows, thinner for highlights\n• Draw from your shoulder, not your wrist\n• Erase construction lines lightly before final lines"
+                "title": "Shading",
+                "description": "Add values, shadows, and dimension to create form and depth. Consider the light source and how it affects the subject. This brings your drawing to life.\n\nTips:\n• Squint to see value relationships more clearly\n• Build up gradually from light to dark\n• Use the side of your pencil for smooth shading"
             },
             {
                 "step_number": 4,
-                "title": "Shading",
-                "description": "Add values, shadows, and highlights to create depth and dimension. Consider the light source and how it affects the subject.\n\nTips:\n• Squint to see value relationships more clearly\n• Build up gradually from light to dark\n• Leave your brightest highlights for last"
+                "title": "Final Details",
+                "description": "Add finishing touches including textures, highlights, and refined details. This is where you polish your work and add character.\n\nTips:\n• Add surface textures and patterns\n• Enhance highlights with an eraser for extra pop\n• Step back frequently to evaluate overall effect"
             }
         ]
 

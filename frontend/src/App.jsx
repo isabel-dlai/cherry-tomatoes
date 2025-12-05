@@ -32,6 +32,10 @@ function App() {
       setIsLoading(true);
       setError(null);
       const tutorial = await tutorialAPI.generateTutorial(inputType, data);
+
+      // Save tutorial to localStorage
+      saveTutorialToLocalStorage(tutorial);
+
       setCurrentTutorial(tutorial);
       setActiveTab('tutorial');
     } catch (err) {
@@ -39,6 +43,24 @@ function App() {
       setError('Failed to generate tutorial. Please try again.');
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const saveTutorialToLocalStorage = (tutorial) => {
+    try {
+      // Get existing tutorials from localStorage
+      const existingTutorials = JSON.parse(localStorage.getItem('tutorials') || '[]');
+
+      // Add new tutorial at the beginning (most recent first)
+      existingTutorials.unshift({
+        ...tutorial,
+        created_at: new Date().toISOString()
+      });
+
+      // Store back to localStorage
+      localStorage.setItem('tutorials', JSON.stringify(existingTutorials));
+    } catch (err) {
+      console.error('Error saving tutorial to localStorage:', err);
     }
   };
 
@@ -61,12 +83,15 @@ function App() {
             <div className="flex items-center space-x-4">
               <img
                 src="/static/logo/tomatoes2.png?v=2"
-                alt="Drawing Tutor Logo"
+                alt="Cherry Tomatoes Logo"
                 className="h-16 w-auto"
               />
-              <h1 className="text-3xl font-bold text-gray-800">
-                Drawing Tutor
-              </h1>
+              <div>
+                <h1 className="text-3xl font-bold text-gray-800">
+                  Cherry Tomatoes
+                </h1>
+                <p className="text-xs text-gray-500">Custom Drawing Tutorials</p>
+              </div>
             </div>
 
             {/* Navigation Tabs */}
