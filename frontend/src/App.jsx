@@ -78,8 +78,8 @@ function App() {
     <div className="h-screen bg-gray-50 flex flex-col overflow-hidden">
       {/* Header */}
       <header className="bg-white shadow-sm flex-shrink-0">
-        <div className={activeTab === 'tutorial' ? '' : 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'}>
-          <div className={`flex justify-between items-center h-24 ${activeTab === 'tutorial' ? 'px-6' : ''}`}>
+        <div className="px-6">
+          <div className="flex justify-between items-center h-24">
             <div className="flex items-center space-x-4">
               <img
                 src="/static/logo/tomatoes2.png?v=2"

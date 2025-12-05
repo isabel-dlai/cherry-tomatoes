@@ -79,7 +79,7 @@ const TutorialDisplay = ({ tutorial, onBack }) => {
                     index === currentStep
                       ? 'bg-primary-500 text-white'
                       : index < currentStep
-                        ? 'bg-green-500 text-white'
+                        ? 'bg-primary-100 text-primary-600'
                         : 'bg-gray-300 text-gray-700'
                   }`}>
                     {index < currentStep ? (

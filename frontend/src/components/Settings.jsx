@@ -16,21 +16,16 @@ const MODELS = [
 ];
 
 const ACCENT_COLORS = [
-  {
-    id: 'blue',
-    name: 'Blue',
-    preview: 'bg-sky-500'
-  },
-  {
-    id: 'pink',
-    name: 'Pink',
-    preview: 'bg-pink-500'
-  },
-  {
-    id: 'green',
-    name: 'Green',
-    preview: 'bg-green-500'
-  }
+  { id: 'blue', preview: 'bg-sky-500' },
+  { id: 'purple', preview: 'bg-purple-500' },
+  { id: 'pink', preview: 'bg-pink-500' },
+  { id: 'red', preview: 'bg-red-500' },
+  { id: 'orange', preview: 'bg-orange-500' },
+  { id: 'amber', preview: 'bg-amber-500' },
+  { id: 'green', preview: 'bg-green-500' },
+  { id: 'teal', preview: 'bg-teal-500' },
+  { id: 'cyan', preview: 'bg-cyan-500' },
+  { id: 'indigo', preview: 'bg-indigo-500' }
 ];
 
 function Settings({ onClose }) {
@@ -64,11 +59,8 @@ function Settings({ onClose }) {
     // Apply theme immediately
     applyTheme(accentColor);
 
-    setSaveSuccess(true);
-    setTimeout(() => {
-      setSaveSuccess(false);
-      if (onClose) onClose();
-    }, 1500);
+    // Close immediately after saving
+    if (onClose) onClose();
   };
 
   const applyTheme = (color) => {
@@ -258,42 +250,34 @@ function Settings({ onClose }) {
             <label className="block text-sm font-medium text-gray-700 mb-3">
               Accent Color
             </label>
-            <div className="grid grid-cols-3 gap-3">
+            <div className="flex flex-wrap gap-3">
               {ACCENT_COLORS.map((color) => (
-                <div
+                <button
                   key={color.id}
                   onClick={() => setAccentColor(color.id)}
-                  className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
+                  className={`relative w-10 h-10 rounded-full border-2 transition-all ${color.preview} ${
                     accentColor === color.id
-                      ? 'border-primary-500 bg-primary-50'
-                      : 'border-gray-200 hover:border-gray-300'
+                      ? 'border-gray-800 ring-2 ring-primary-500 ring-offset-2'
+                      : 'border-gray-300 hover:border-gray-400'
                   }`}
+                  title={color.id}
                 >
-                  <div className="flex flex-col items-center space-y-2">
-                    <div className={`w-10 h-10 rounded-full ${color.preview}`} />
-                    <span className="text-sm font-medium text-gray-900">
-                      {color.name}
-                    </span>
-                    {accentColor === color.id && (
-                      <svg
-                        className="w-5 h-5 text-primary-600"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                    )}
-                  </div>
-                </div>
+                  {accentColor === color.id && (
+                    <svg
+                      className="absolute inset-0 m-auto w-5 h-5 text-white drop-shadow-md"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  )}
+                </button>
               ))}
             </div>
-            <p className="mt-3 text-sm text-gray-600">
-              Choose an accent color that will be applied throughout the app
-            </p>
           </div>
         </div>
 
