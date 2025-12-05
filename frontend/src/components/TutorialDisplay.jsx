@@ -154,7 +154,7 @@ const TutorialDisplay = ({ tutorial, onBack }) => {
             </div>
 
             {/* Action Buttons */}
-            <div className="px-4 py-3 space-y-2">
+            <div className="px-4 py-3">
               <button
                 onClick={() => {
                   const link = document.createElement('a');
@@ -165,12 +165,6 @@ const TutorialDisplay = ({ tutorial, onBack }) => {
                 className="w-full px-3 py-2 bg-primary-500 text-white rounded text-sm font-medium hover:bg-primary-600 transition-colors"
               >
                 Download Image
-              </button>
-              <button
-                onClick={onBack}
-                className="w-full px-3 py-2 bg-white border border-gray-300 text-gray-700 rounded text-sm font-medium hover:bg-gray-50 transition-colors"
-              >
-                New Tutorial
               </button>
             </div>
           </div>
