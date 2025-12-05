@@ -168,7 +168,7 @@ function App() {
           )}
 
           {/* Tab Content */}
-          <div className="transition-all duration-300">
+          <div className="transition-all duration-300" style={{ height: '100%' }}>
             {activeTab === 'create' && !currentTutorial && (
               <div className="flex justify-center">
                 <InputInterface

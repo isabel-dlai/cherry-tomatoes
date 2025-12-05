@@ -45,11 +45,20 @@ const TutorialDisplay = ({ tutorial, onBack }) => {
   return (
     <div className="flex h-full overflow-hidden">
       {/* Collapsible Sidebar - Full Height */}
-      <div className={`bg-gray-50 border-r border-gray-200 transition-all duration-300 ${sidebarOpen ? 'w-72' : 'w-0'} flex-shrink-0 overflow-hidden`}>
+      <div className={`bg-gray-50 border-r border-gray-200 transition-all duration-300 ${sidebarOpen ? 'w-72' : 'w-0'} flex-shrink-0 overflow-hidden h-full`}>
         <div className="h-full flex flex-col w-72">
           {/* Sidebar Header */}
-          <div className="p-4 border-b border-gray-200">
+          <div className="p-4 border-b border-gray-200 flex items-center justify-between">
             <h2 className="font-bold text-gray-800 text-lg">{tutorial.subject}</h2>
+            <button
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+              className="p-1.5 hover:bg-gray-200 rounded-lg transition-colors"
+              title="Hide sidebar"
+            >
+              <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
+              </svg>
+            </button>
           </div>
 
           {/* Steps List */}
@@ -168,51 +177,32 @@ const TutorialDisplay = ({ tutorial, onBack }) => {
       </div>
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col overflow-hidden">
-        {/* Subheader with toggle and step info */}
-        <div className="bg-gray-100 border-b border-gray-200 px-6 py-3 flex items-center justify-between">
-          <div className="flex items-center space-x-4">
-            {/* Toggle Button */}
-            <button
-              onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="p-2 hover:bg-gray-200 rounded-lg transition-colors"
-              title={sidebarOpen ? "Hide sidebar" : "Show sidebar"}
-            >
-              <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={sidebarOpen ? "M11 19l-7-7 7-7m8 14l-7-7 7-7" : "M4 6h16M4 12h16M4 18h16"} />
-              </svg>
-            </button>
-            <div>
-              <h2 className="text-lg font-bold text-gray-800">
-                {tutorial.subject}
-              </h2>
-              <p className="text-xs text-gray-600">
-                Step {currentStep + 1}: {tutorial.steps[currentStep].title}
-              </p>
-            </div>
-          </div>
-        </div>
+      <div className="flex-1 flex flex-col overflow-hidden relative">
+        {/* Show sidebar button when collapsed */}
+        {!sidebarOpen && (
+          <button
+            onClick={() => setSidebarOpen(true)}
+            className="absolute top-4 left-4 z-10 p-2 bg-white hover:bg-gray-100 rounded-lg shadow-lg border border-gray-200 transition-colors"
+            title="Show sidebar"
+          >
+            <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+        )}
 
-        {/* Main content area - calculate exact height: viewport - header(96px) - subheader(~52px) */}
-        <div className="overflow-hidden bg-white" style={{ height: 'calc(100vh - 96px - 52px)' }}>
+        {/* Main content area - calculate exact height: viewport - header(96px) */}
+        <div className="overflow-hidden bg-white h-full">
           {/* Artist Workflow Layout */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-full p-6">
         {/* Left: Current Step (Large - 2 columns) */}
         <div className="lg:col-span-2 overflow-hidden flex flex-col min-h-0">
-          <div className="bg-white rounded-lg shadow-lg p-6 h-full flex flex-col min-h-0">
-            <div className="flex items-center mb-4 flex-shrink-0">
-              <div className="w-12 h-12 bg-primary-500 text-white rounded-full flex items-center justify-center font-bold text-xl mr-4">
-                {currentStep + 1}
-              </div>
-              <div>
-                <h3 className="text-2xl font-semibold text-gray-800">
-                  {tutorial.steps[currentStep].title}
-                </h3>
-              </div>
-            </div>
+          <div className="bg-white rounded-lg shadow-lg p-6 h-full flex flex-col min-h-0 items-center justify-center">
             <div
-              className="flex-1 overflow-hidden rounded-lg border-4 border-primary-500 min-h-0"
+              className="w-full rounded-lg border-4 border-primary-500"
               style={{
+                aspectRatio: '4 / 3',
+                maxHeight: '100%',
                 backgroundImage: `url(${tutorial.tutorial_image_url})`,
                 backgroundSize: '200% 200%',
                 backgroundPosition: `${stepPositions[currentStep].x}% ${stepPositions[currentStep].y}%`,
@@ -223,16 +213,18 @@ const TutorialDisplay = ({ tutorial, onBack }) => {
         </div>
 
         {/* Right Column: Final Result + Instructions - Split 40%/60% */}
-        <div className="flex flex-col gap-6 h-full min-h-0">
-          {/* Final Result Reference - 40% of height */}
-          <div className="bg-white rounded-lg shadow-lg p-4 flex flex-col overflow-hidden" style={{ height: '40%', minHeight: '180px' }}>
+        <div className="flex flex-col gap-4 h-full min-h-0">
+          {/* Final Result Reference - Takes 2/5 of space */}
+          <div className="bg-white rounded-lg shadow-lg p-4 flex flex-col overflow-hidden min-h-0" style={{ flex: '2 1 0' }}>
             <h4 className="text-sm font-semibold text-gray-800 mb-3 text-center uppercase tracking-wide flex-shrink-0">
               Goal
             </h4>
-            <div className="flex-1 min-h-0 relative rounded-lg border-3 border-green-500 overflow-hidden">
+            <div className="flex-1 min-h-0 flex items-center justify-center overflow-hidden">
               <div
-                className="absolute inset-0"
+                className="w-full rounded-lg border-3 border-green-500"
                 style={{
+                  aspectRatio: '1',
+                  maxHeight: '100%',
                   backgroundImage: `url(${tutorial.tutorial_image_url})`,
                   backgroundSize: '200% 200%',
                   backgroundPosition: '100% 100%',
@@ -242,8 +234,8 @@ const TutorialDisplay = ({ tutorial, onBack }) => {
             </div>
           </div>
 
-          {/* Instructions - 60% of height with scrollable content */}
-          <div className="bg-white rounded-lg shadow-lg p-6 flex flex-col overflow-hidden" style={{ height: '60%', minHeight: '220px' }}>
+          {/* Instructions - Takes 3/5 of space with scrollable content */}
+          <div className="bg-white rounded-lg shadow-lg p-4 flex flex-col overflow-hidden min-h-0" style={{ flex: '3 1 0' }}>
             <h4 className="text-sm font-semibold text-gray-800 mb-3 uppercase tracking-wide flex-shrink-0">
               Instructions
             </h4>
