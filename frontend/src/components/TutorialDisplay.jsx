@@ -3,6 +3,7 @@ import React, { useState, useRef, useEffect } from 'react';
 const TutorialDisplay = ({ tutorial, onBack }) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [imageDimensions, setImageDimensions] = useState({ width: 0, height: 0 });
+  const [sidebarOpen, setSidebarOpen] = useState(true);
   const imageRef = useRef(null);
 
   if (!tutorial) {
@@ -42,58 +43,164 @@ const TutorialDisplay = ({ tutorial, onBack }) => {
   };
 
   return (
-    <div className="w-full max-w-6xl mx-auto p-6">
-      {/* Header */}
-      <div className="mb-6 flex items-center justify-between">
-        <button
-          onClick={onBack}
-          className="flex items-center text-gray-600 hover:text-gray-800 transition-colors"
-        >
-          <svg
-            className="w-5 h-5 mr-2"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M10 19l-7-7m0 0l7-7m-7 7h18"
-            />
-          </svg>
-          Back
-        </button>
-        <h2 className="text-2xl font-bold text-gray-800">
-          Drawing Tutorial: {tutorial.subject}
-        </h2>
-        <div className="w-20"></div>
+    <div className="flex h-full overflow-hidden">
+      {/* Collapsible Sidebar - Full Height */}
+      <div className={`bg-gray-50 border-r border-gray-200 transition-all duration-300 ${sidebarOpen ? 'w-72' : 'w-0'} flex-shrink-0 overflow-hidden`}>
+        <div className="h-full flex flex-col w-72">
+          {/* Sidebar Header */}
+          <div className="p-4 border-b border-gray-200">
+            <h2 className="font-bold text-gray-800 text-lg">{tutorial.subject}</h2>
+          </div>
+
+          {/* Steps List */}
+          <div className="flex-1 overflow-y-auto">
+            {tutorial.steps.map((step, index) => (
+              <button
+                key={step.step_number}
+                onClick={() => setCurrentStep(index)}
+                className={`w-full text-left px-4 py-3 border-l-4 transition-all ${
+                  index === currentStep
+                    ? 'bg-primary-50 border-primary-500'
+                    : 'bg-transparent border-transparent hover:bg-gray-100'
+                }`}
+              >
+                <div className="flex items-start">
+                  <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold mr-3 mt-0.5 flex-shrink-0 ${
+                    index === currentStep
+                      ? 'bg-primary-500 text-white'
+                      : index < currentStep
+                        ? 'bg-green-500 text-white'
+                        : 'bg-gray-300 text-gray-700'
+                  }`}>
+                    {index < currentStep ? (
+                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      </svg>
+                    ) : (
+                      step.step_number
+                    )}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="font-semibold text-sm text-gray-900">{step.title}</div>
+                    <div className="text-xs text-gray-600 mt-0.5">
+                      Step {index + 1} of {tutorial.steps.length}
+                    </div>
+                  </div>
+                </div>
+              </button>
+            ))}
+          </div>
+
+          {/* Bottom Section - Progress & Actions */}
+          <div className="border-t border-gray-200 bg-white">
+            {/* Progress Bar */}
+            <div className="px-4 py-3 border-b border-gray-200">
+              <div className="flex items-center justify-between text-xs mb-2">
+                <span className="font-medium text-gray-700">Progress</span>
+                <span className="text-gray-500">
+                  {Math.round(((currentStep + 1) / tutorial.steps.length) * 100)}%
+                </span>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-1.5">
+                <div
+                  className="bg-primary-500 h-1.5 rounded-full transition-all duration-300"
+                  style={{ width: `${((currentStep + 1) / tutorial.steps.length) * 100}%` }}
+                ></div>
+              </div>
+            </div>
+
+            {/* Navigation Buttons */}
+            <div className="px-4 py-3 border-b border-gray-200">
+              <div className="flex gap-2">
+                <button
+                  onClick={handlePrevious}
+                  disabled={currentStep === 0}
+                  className={`flex-1 flex items-center justify-center px-3 py-2 rounded text-sm font-medium transition-all ${
+                    currentStep === 0
+                      ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                      : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                  }`}
+                >
+                  <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                  </svg>
+                  Prev
+                </button>
+                <button
+                  onClick={handleNext}
+                  disabled={currentStep === tutorial.steps.length - 1}
+                  className={`flex-1 flex items-center justify-center px-3 py-2 rounded text-sm font-medium transition-all ${
+                    currentStep === tutorial.steps.length - 1
+                      ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                      : 'bg-primary-500 text-white hover:bg-primary-600'
+                  }`}
+                >
+                  Next
+                  <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="px-4 py-3 space-y-2">
+              <button
+                onClick={() => {
+                  const link = document.createElement('a');
+                  link.href = tutorial.tutorial_image_url;
+                  link.download = `tutorial_${tutorial.subject.replace(/\s+/g, '_')}.png`;
+                  link.click();
+                }}
+                className="w-full px-3 py-2 bg-primary-500 text-white rounded text-sm font-medium hover:bg-primary-600 transition-colors"
+              >
+                Download Image
+              </button>
+              <button
+                onClick={onBack}
+                className="w-full px-3 py-2 bg-white border border-gray-300 text-gray-700 rounded text-sm font-medium hover:bg-gray-50 transition-colors"
+              >
+                New Tutorial
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
 
-      {/* Progress Indicator */}
-      <div className="mb-8">
-        <div className="flex items-center justify-between mb-2">
-          <span className="text-sm font-medium text-gray-700">
-            Step {currentStep + 1} of {tutorial.steps.length}
-          </span>
-          <span className="text-sm text-gray-500">
-            {Math.round(((currentStep + 1) / tutorial.steps.length) * 100)}% Complete
-          </span>
+      {/* Main Content Area */}
+      <div className="flex-1 flex flex-col overflow-hidden">
+        {/* Subheader with toggle and step info */}
+        <div className="bg-gray-100 border-b border-gray-200 px-6 py-3 flex items-center justify-between">
+          <div className="flex items-center space-x-4">
+            {/* Toggle Button */}
+            <button
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+              className="p-2 hover:bg-gray-200 rounded-lg transition-colors"
+              title={sidebarOpen ? "Hide sidebar" : "Show sidebar"}
+            >
+              <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={sidebarOpen ? "M11 19l-7-7 7-7m8 14l-7-7 7-7" : "M4 6h16M4 12h16M4 18h16"} />
+              </svg>
+            </button>
+            <div>
+              <h2 className="text-lg font-bold text-gray-800">
+                {tutorial.subject}
+              </h2>
+              <p className="text-xs text-gray-600">
+                Step {currentStep + 1}: {tutorial.steps[currentStep].title}
+              </p>
+            </div>
+          </div>
         </div>
-        <div className="w-full bg-gray-200 rounded-full h-2">
-          <div
-            className="bg-primary-500 h-2 rounded-full transition-all duration-300"
-            style={{ width: `${((currentStep + 1) / tutorial.steps.length) * 100}%` }}
-          ></div>
-        </div>
-      </div>
 
-      {/* Artist Workflow Layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        {/* Main content area - calculate exact height: viewport - header(96px) - subheader(~52px) */}
+        <div className="overflow-hidden bg-white" style={{ height: 'calc(100vh - 96px - 52px)' }}>
+          {/* Artist Workflow Layout */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-full p-6">
         {/* Left: Current Step (Large - 2 columns) */}
-        <div className="lg:col-span-2">
-          <div className="bg-white rounded-lg shadow-lg p-6">
-            <div className="flex items-center mb-4">
+        <div className="lg:col-span-2 overflow-hidden flex flex-col min-h-0">
+          <div className="bg-white rounded-lg shadow-lg p-6 h-full flex flex-col min-h-0">
+            <div className="flex items-center mb-4 flex-shrink-0">
               <div className="w-12 h-12 bg-primary-500 text-white rounded-full flex items-center justify-center font-bold text-xl mr-4">
                 {currentStep + 1}
               </div>
@@ -103,33 +210,29 @@ const TutorialDisplay = ({ tutorial, onBack }) => {
                 </h3>
               </div>
             </div>
-            <div className="relative w-full overflow-hidden rounded-lg border-4 border-primary-500">
-              <div
-                className="w-full"
-                style={{
-                  paddingBottom: '75%',
-                  backgroundImage: `url(${tutorial.tutorial_image_url})`,
-                  backgroundSize: '200% 200%',
-                  backgroundPosition: `${stepPositions[currentStep].x}% ${stepPositions[currentStep].y}%`,
-                  backgroundRepeat: 'no-repeat',
-                }}
-              />
-            </div>
+            <div
+              className="flex-1 overflow-hidden rounded-lg border-4 border-primary-500 min-h-0"
+              style={{
+                backgroundImage: `url(${tutorial.tutorial_image_url})`,
+                backgroundSize: '200% 200%',
+                backgroundPosition: `${stepPositions[currentStep].x}% ${stepPositions[currentStep].y}%`,
+                backgroundRepeat: 'no-repeat',
+              }}
+            />
           </div>
         </div>
 
-        {/* Right Column: Final Result + Instructions */}
-        <div className="space-y-6">
-          {/* Final Result Reference */}
-          <div className="bg-white rounded-lg shadow-lg p-4">
-            <h4 className="text-sm font-semibold text-gray-800 mb-3 text-center uppercase tracking-wide">
+        {/* Right Column: Final Result + Instructions - Split 40%/60% */}
+        <div className="flex flex-col gap-6 h-full min-h-0">
+          {/* Final Result Reference - 40% of height */}
+          <div className="bg-white rounded-lg shadow-lg p-4 flex flex-col overflow-hidden" style={{ height: '40%', minHeight: '180px' }}>
+            <h4 className="text-sm font-semibold text-gray-800 mb-3 text-center uppercase tracking-wide flex-shrink-0">
               Goal
             </h4>
-            <div className="relative w-full overflow-hidden rounded-lg border-3 border-green-500">
+            <div className="flex-1 min-h-0 relative rounded-lg border-3 border-green-500 overflow-hidden">
               <div
-                className="w-full"
+                className="absolute inset-0"
                 style={{
-                  paddingBottom: '75%',
                   backgroundImage: `url(${tutorial.tutorial_image_url})`,
                   backgroundSize: '200% 200%',
                   backgroundPosition: '100% 100%',
@@ -139,148 +242,18 @@ const TutorialDisplay = ({ tutorial, onBack }) => {
             </div>
           </div>
 
-          {/* Instructions */}
-          <div className="bg-white rounded-lg shadow-lg p-6">
-            <h4 className="text-sm font-semibold text-gray-800 mb-3 uppercase tracking-wide">
+          {/* Instructions - 60% of height with scrollable content */}
+          <div className="bg-white rounded-lg shadow-lg p-6 flex flex-col overflow-hidden" style={{ height: '60%', minHeight: '220px' }}>
+            <h4 className="text-sm font-semibold text-gray-800 mb-3 uppercase tracking-wide flex-shrink-0">
               Instructions
             </h4>
-            <div className="text-gray-700 leading-relaxed whitespace-pre-line">
+            <div className="flex-1 overflow-y-auto text-gray-700 leading-relaxed whitespace-pre-line pr-2">
               {tutorial.steps[currentStep].description}
             </div>
           </div>
         </div>
       </div>
-
-      {/* Navigation Buttons */}
-      <div className="flex justify-between items-center mb-8">
-        <button
-          onClick={handlePrevious}
-          disabled={currentStep === 0}
-          className={`flex items-center px-6 py-3 rounded-lg font-medium transition-all ${
-            currentStep === 0
-              ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
-              : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-          }`}
-        >
-          <svg
-            className="w-5 h-5 mr-2"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M15 19l-7-7 7-7"
-            />
-          </svg>
-          Previous Step
-        </button>
-
-        <div className="flex space-x-2">
-          {tutorial.steps.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => setCurrentStep(index)}
-              className={`w-3 h-3 rounded-full transition-all ${
-                index === currentStep
-                  ? 'bg-primary-500 w-8'
-                  : 'bg-gray-300 hover:bg-gray-400'
-              }`}
-              aria-label={`Go to step ${index + 1}`}
-            />
-          ))}
         </div>
-
-        <button
-          onClick={handleNext}
-          disabled={currentStep === tutorial.steps.length - 1}
-          className={`flex items-center px-6 py-3 rounded-lg font-medium transition-all ${
-            currentStep === tutorial.steps.length - 1
-              ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
-              : 'bg-primary-500 text-white hover:bg-primary-600'
-          }`}
-        >
-          Next Step
-          <svg
-            className="w-5 h-5 ml-2"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M9 5l7 7-7 7"
-            />
-          </svg>
-        </button>
-      </div>
-
-      {/* All Steps Overview (collapsed) */}
-      <details className="bg-white rounded-lg shadow-md p-6 mb-8">
-        <summary className="cursor-pointer font-semibold text-gray-800 text-lg">
-          View All Steps
-        </summary>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-          {tutorial.steps.map((step, index) => (
-            <div
-              key={step.step_number}
-              className={`bg-gray-50 rounded-lg p-4 cursor-pointer transition-all ${
-                index === currentStep ? 'ring-2 ring-primary-500' : 'hover:bg-gray-100'
-              }`}
-              onClick={() => setCurrentStep(index)}
-            >
-              <div className="flex items-center mb-3">
-                <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold mr-3 ${
-                  index === currentStep ? 'bg-primary-500 text-white' : 'bg-gray-300 text-gray-700'
-                }`}>
-                  {step.step_number}
-                </div>
-                <h3 className="text-lg font-semibold text-gray-800">
-                  {step.title}
-                </h3>
-              </div>
-              <div className="text-gray-600 text-sm leading-relaxed whitespace-pre-line">
-                {step.description}
-              </div>
-            </div>
-          ))}
-        </div>
-      </details>
-
-      {/* Tutorial Info */}
-      <div className="text-center text-sm text-gray-500 mb-6">
-        Created on {new Date(tutorial.created_at).toLocaleDateString('en-US', {
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric',
-          hour: '2-digit',
-          minute: '2-digit'
-        })}
-      </div>
-
-      {/* Action Buttons */}
-      <div className="flex justify-center space-x-4">
-        <button
-          onClick={onBack}
-          className="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors font-medium"
-        >
-          Create New Tutorial
-        </button>
-        <button
-          onClick={() => {
-            const link = document.createElement('a');
-            link.href = tutorial.tutorial_image_url;
-            link.download = `tutorial_${tutorial.subject.replace(/\s+/g, '_')}.png`;
-            link.click();
-          }}
-          className="px-6 py-3 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors font-medium"
-        >
-          Download Full Image
-        </button>
       </div>
     </div>
   );

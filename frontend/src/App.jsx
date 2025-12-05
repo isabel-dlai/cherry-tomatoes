@@ -40,14 +40,14 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
+    <div className="h-screen bg-gray-50 flex flex-col overflow-hidden">
       {/* Header */}
-      <header className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-24">
+      <header className="bg-white shadow-sm flex-shrink-0">
+        <div className={activeTab === 'tutorial' ? '' : 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'}>
+          <div className={`flex justify-between items-center h-24 ${activeTab === 'tutorial' ? 'px-6' : ''}`}>
             <div className="flex items-center space-x-4">
               <img
-                src="/static/logo/tomatoes2.png"
+                src="/static/logo/tomatoes2.png?v=2"
                 alt="Drawing Tutor Logo"
                 className="h-16 w-auto"
               />
@@ -124,9 +124,9 @@ function App() {
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 py-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {error && (
+      <main className={`flex-1 overflow-hidden ${activeTab === 'tutorial' ? '' : 'py-10 overflow-y-auto'}`}>
+        <div className={`h-full ${activeTab === 'tutorial' ? '' : 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'}`}>
+          {error && activeTab !== 'tutorial' && (
             <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-4">
               <div className="flex">
                 <div className="flex-shrink-0">
@@ -191,15 +191,6 @@ function App() {
           </div>
         </div>
       </main>
-
-      {/* Footer */}
-      <footer className="bg-white border-t border-gray-200 mt-auto">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <p className="text-center text-sm text-gray-500">
-            © 2024 Drawing Tutor. Learn to draw with AI-powered tutorials.
-          </p>
-        </div>
-      </footer>
 
       {/* Settings Modal */}
       {showSettings && <Settings onClose={() => setShowSettings(false)} />}

@@ -11,7 +11,7 @@ const MODELS = [
     id: 'gemini-3-pro-image-preview',
     name: 'Gemini 3 Pro Image',
     nickname: 'Nano Banana Pro',
-    description: 'Advanced image generation with higher quality'
+    description: 'Advanced image generation with improved quality and text rendering'
   }
 ];
 
@@ -204,7 +204,7 @@ function Settings({ onClose }) {
                 />
               </svg>
               <p>
-                Note: Gemini 3 Pro Image may have different rate limits and pricing.
+                Note: Different models have different rate limits and pricing.
                 Check{' '}
                 <a
                   href="https://ai.google.dev/pricing"
