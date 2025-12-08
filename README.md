@@ -1,14 +1,18 @@
-# Drawing Tutor
+# Cherry Tomatoes
+
+**Custom Drawing Tutorials**
 
 An AI-powered web application that helps users learn to draw by generating step-by-step tutorials. Users can either upload an image or provide a topic, and the app generates a 4-panel visual tutorial showing the standard artistic progression from basic shapes to finished drawing.
 
 ## Features
 
 - **Dual Input Modes**: Upload an image or enter a topic
-- **4-Panel Tutorial Generation**: Basic shapes → Rough sketch → Line work → Shading
-- **Tutorial History**: Save and revisit all your generated tutorials
+- **4-Panel Tutorial Generation**: Basic shapes → Rough sketch → Shading → Final details
+- **localStorage Tutorial History**: Save and revisit tutorials in your browser
+- **10 Accent Color Themes**: Customize the UI with your preferred color
 - **Clean, Modern UI**: Built with React and TailwindCSS
-- **Fast API Backend**: Powered by FastAPI and MongoDB
+- **Fast API Backend**: Powered by FastAPI with optional MongoDB
+- **Responsive Design**: Viewport-fitted layout optimized for artists
 
 ## Architecture
 
@@ -206,14 +210,27 @@ drawing-tutor/
 - MongoDB Compass can be used to view database directly
 - Check browser console and network tab for debugging
 
-## Future Enhancements
+## Next Steps / Roadmap
 
+### High Priority
+- **Variable Step Count**: Allow users to choose 3, 4, 5, or 6 steps instead of fixed 4-panel layout
+  - Update grid template generation to support dynamic layouts
+  - Modify prompt engineering for different step counts
+  - Adjust UI to accommodate variable grid sizes
+
+- **Grid Overlay Feature**: Add toggleable grid overlay on tutorial images
+  - Help users align proportions when following along
+  - Toggle on/off during tutorial viewing
+  - Adjustable grid density (3x3, 4x4, etc.)
+
+### Future Enhancements
 - User authentication and personal galleries
-- Custom step counts (3, 5, or 6 steps)
 - Different drawing styles (realistic, cartoon, anime)
 - Progress tracking and feedback
 - Export tutorials as PDF
 - Mobile app version
+- Video tutorial generation
+- Community sharing and tutorial library
 
 ## Contributing
 
